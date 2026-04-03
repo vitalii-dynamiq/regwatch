@@ -48,14 +48,14 @@ class Settings(BaseSettings):
     SENTRY_TRACES_SAMPLE_RATE: float = 0.2
     SENTRY_PROFILE_SESSION_SAMPLE_RATE: float = 0.2
 
-    TOGETHER_API_KEY: str
+    TOGETHER_API_KEY: str = ""
     CLASSIFIER_MODEL: str = "deepseek-ai/DeepSeek-R1"
     CLASSIFIER_MAX_CONTENT_CHARS: int = 480000
     CLASSIFIER_MAX_TOKENS: int = 128000
     CLASSIFIER_TEMPERATURE: float = 0.1
     CLASSIFIER_EXTRACTION_TEMPERATURE: float = 0.0
 
-    JINA_API_KEY: str
+    JINA_API_KEY: str = ""
     CRAWLER_MAX_CONCURRENCY: int = 8
     CRAWLER_MAX_REDIRECTS: int = 5
     CRAWLER_JINA_ENDPOINT: str = "https://r.jina.ai/"
@@ -85,7 +85,7 @@ class Settings(BaseSettings):
     TASKIQ_ADMIN_API_TOKEN: str = ""
     TASKIQ_STUCK_TASK_THRESHOLD_HOURS: int = 6  # Hours before considering a task stuck
 
-    ADMIN_TOKEN: SecretStr
+    ADMIN_TOKEN: SecretStr = SecretStr("")
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
@@ -123,11 +123,13 @@ class LocalSettings(Settings):
 
 
 def get_settings() -> Settings:
-    new_settings: Settings = {
+    settings_map: dict[Environment, type[Settings]] = {
         Environment.LOCAL: LocalSettings,
-    }[Settings().ENV]()
-
-    return new_settings
+        Environment.DEV: Settings,
+        Environment.STAGE: Settings,
+        Environment.PROD: Settings,
+    }
+    return settings_map[Settings().ENV]()
 
 
 settings: Settings = get_settings()
