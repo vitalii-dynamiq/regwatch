@@ -1,0 +1,104 @@
+services:
+  db:
+    image: postgres:17.2
+    container_name: regwatch_api_db
+    ports:
+      - "5442:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./data:/tmp/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: regwatch_api
+      POSTGRES_INITDB_ARGS: "-E UTF8"
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d regwatch_api"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  app:
+    build:
+      context: .
+    container_name: regwatch_api_app
+    command: ["sh", "-c", "make db-migrate-local && make run-local"]
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8060:8080"
+    environment:
+      DB_URL: postgresql+asyncpg://postgres:postgres@db:5432/regwatch_api
+      TASKIQ_ADMIN_URL: http://taskiq_admin:3000
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    restart: unless-stopped
+
+  taskiq_worker:
+    build:
+      context: .
+    container_name: regwatch_taskiq_worker
+    command: [
+      "taskiq", "worker", "app.taskiq.broker:broker",
+      "--workers", "${TASKIQ_WORKERS:-2}",
+      "--max-async-tasks", "${TASKIQ_MAX_ASYNC_TASKS:-20}",
+    ]
+    depends_on:
+      db:
+        condition: service_started
+    environment:
+      DB_URL: postgresql+asyncpg://postgres:postgres@db:5432/regwatch_api
+      TASKIQ_ENABLED: "true"
+      TASKIQ_ADMIN_URL: http://taskiq_admin:3000
+      PYTHONUNBUFFERED: "1"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    restart: unless-stopped
+
+  taskiq_scheduler:
+    build:
+      context: .
+    container_name: regwatch_taskiq_scheduler
+    command: ["taskiq", "scheduler", "app.taskiq.schedulers.cron:scheduler"]
+    depends_on:
+      db:
+        condition: service_started
+      taskiq_worker:
+        condition: service_started
+    environment:
+      DB_URL: postgresql+asyncpg://postgres:postgres@db:5432/regwatch_api
+      TASKIQ_ENABLED: "true"
+      TASKIQ_ADMIN_URL: http://taskiq_admin:3000
+      PYTHONUNBUFFERED: "1"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    restart: unless-stopped
+
+  taskiq_admin:
+    image: ghcr.io/taskiq-python/taskiq-admin:latest
+    container_name: regwatch_taskiq_admin
+    ports:
+      - "3001:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/regwatch_api
+    env_file:
+      - .env
+    restart: unless-stopped
+
+volumes:
+  db-data:
+  redis_data:

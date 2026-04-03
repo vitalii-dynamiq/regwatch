@@ -1,0 +1,79 @@
+### POST request - Create a new regulatory source.
+POST {{API_URL}}/v1/sources
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "name": "string",
+  "base_url": "https://example.com/",
+  "description": "string",
+  "jurisdiction_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "content_types": [
+    "string"
+  ],
+  "monitoring_enabled": true,
+  "monitoring_frequency": "daily"
+}
+
+### GET request - Get a list of regulatory sources with filtering and pagination.
+GET {{API_URL}}/v1/sources
+Accept: application/json
+Authorization: Bearer {{TOKEN}}
+
+### PATCH request - Bulk update sources monitoring settings.
+PATCH {{API_URL}}/v1/sources
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "ids": [
+    "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+  ],
+  "monitoring_enabled": true
+}
+
+### DELETE request - Bulk delete regulatory sources.
+DELETE {{API_URL}}/v1/sources
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "ids": [
+    "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+  ]
+}
+
+### GET request - Get available assets for sources.
+GET {{API_URL}}/v1/sources/assets
+Accept: application/json
+Authorization: Bearer {{TOKEN}}
+
+### GET request - Get a regulatory source by ID.
+GET {{API_URL}}/v1/sources/{{SOURCE_ID}}
+Accept: application/json
+Authorization: Bearer {{TOKEN}}
+
+### PATCH request - Update a regulatory source.
+PATCH {{API_URL}}/v1/sources/{{SOURCE_ID}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "name": "string",
+  "description": "string",
+  "content_types": [
+    "string"
+  ],
+  "monitoring_enabled": true,
+  "monitoring_frequency": "daily"
+}
+
+### DELETE request - Delete a regulatory source.
+DELETE {{API_URL}}/v1/sources/{{OBLIGATION_ID}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### GET request - Get a list of pages for a regulatory source.
+GET {{API_URL}}/v1/sources/{{SOURCE_ID}}/pages
+Accept: application/json
+Authorization: Bearer {{TOKEN}}

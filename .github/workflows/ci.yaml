@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  api-lint:
+    name: API Lint
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || !contains(github.event.pull_request.changed_files, 'ui/')
+    defaults:
+      run:
+        working-directory: api
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pre-commit
+        run: pip install pre-commit
+
+      - name: Run pre-commit
+        run: pre-commit run --all-files --show-diff-on-failure --color always
+        env:
+          SKIP: 'no-commit-to-branch'
+
+      - name: Run conventional commits checker
+        uses: opensource-nepal/commitlint@v1.2.0
+
+  ui-lint:
+    name: UI Lint
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || !contains(github.event.pull_request.changed_files, 'api/')
+    defaults:
+      run:
+        working-directory: ui
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Enable corepack
+        run: corepack enable && corepack prepare pnpm@10.24.0 --activate
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type check
+        run: pnpm typecheck
+
+      - name: Lint
+        run: pnpm check

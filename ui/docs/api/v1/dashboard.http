@@ -1,0 +1,4 @@
+### GET request to users list
+GET {{API_URL}}/v1/dashboard/widgets
+Accept: application/json
+Authorization: Bearer {{TOKEN}}

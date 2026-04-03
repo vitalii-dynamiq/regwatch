@@ -1,0 +1,43 @@
+### GET request - Get a list of regulatory alerts with filtering and pagination.
+GET {{API_URL}}/v1/alerts
+Accept: application/json
+Authorization: Bearer {{TOKEN}}
+
+### DELETE request - Bulk delete regulatory alerts.
+DELETE {{API_URL}}/v1/alerts
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "ids": [
+    "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+  ]
+}
+
+### GET request - Get available assets for alerts.
+GET {{API_URL}}/v1/alerts/assets
+Accept: application/json
+Authorization: Bearer {{TOKEN}}
+
+### GET request - Get a regulatory alert by ID.
+GET {{API_URL}}/v1/alerts/{{ALERT_ID}}
+Accept: application/json
+Authorization: Bearer {{TOKEN}}
+
+### PATCH request - Update a regulatory alert.
+PATCH {{API_URL}}/v1/alerts/{{ALERT_ID}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "status": "new",
+  "assigned_to": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "regulatory_metadata": {
+    "additionalProp1": {}
+  }
+}
+
+### DELETE request - Delete a regulatory alert.
+DELETE {{API_URL}}/v1/alerts/{{ALERT_ID}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}

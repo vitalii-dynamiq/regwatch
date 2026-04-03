@@ -1,0 +1,70 @@
+### POST request - Create a new regulatory obligation.
+POST {{API_URL}}/v1/obligations
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "source_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "alert_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "title": "string",
+  "obligation_type": "regulatory_filing",
+  "content_type": "prudential_risk",
+  "description": "string",
+  "risk_level": "high",
+  "due_date": "2025-10-20T12:21:33.171Z",
+  "effective_date": "2025-10-20T12:21:33.171Z",
+  "assigned_to": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "regulatory_metadata": {
+    "additionalProp1": {}
+  }
+}
+
+### GET request - Get a list of regulatory obligations with filtering and pagination.
+GET {{API_URL}}/v1/obligations
+Accept: application/json
+Authorization: Bearer {{TOKEN}}
+
+### DELETE request - Bulk delete regulatory obligations.
+DELETE {{API_URL}}/v1/obligations
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "ids": [
+    "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+  ]
+}
+
+### GET request - Get available assets for obligations.
+GET {{API_URL}}/v1/obligations/assets
+Accept: application/json
+Authorization: Bearer {{TOKEN}}
+
+### GET request - Get a regulatory obligation by ID.
+GET {{API_URL}}/v1/obligations/{{OBLIGATION_ID}}
+Accept: application/json
+Authorization: Bearer {{TOKEN}}
+
+### PATCH request - Update a regulatory obligation.
+PATCH {{API_URL}}/v1/obligations/{{OBLIGATION_ID}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "title": "string",
+  "description": "string",
+  "risk_level": "high",
+  "content_type": "prudential_risk",
+  "status": "new",
+  "assigned_to": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "due_date": "2025-10-20T12:42:48.183Z",
+  "effective_date": "2025-10-20T12:42:48.183Z",
+  "regulatory_metadata": {
+    "additionalProp1": {}
+  }
+}
+
+### DELETE request - Delete a regulatory obligation.
+DELETE {{API_URL}}/v1/obligations/{{OBLIGATION_ID}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}

@@ -1,0 +1,30 @@
+### POST request for creating user
+POST {{API_URL}}/v1/users
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "email": "ml@otakoyi.com",
+  "first_name": "Maksym",
+  "last_name": "Lukianov"
+}
+
+### GET request to users list
+GET {{API_URL}}/v1/users
+Accept: application/json
+Authorization: Bearer {{TOKEN}}
+
+### GET request for auth user
+GET {{API_URL}}/v1/users/me
+Accept: application/json
+Authorization: Bearer {{TOKEN}}
+
+### PATCH request for updating auth user info
+PATCH {{API_URL}}/v1/users/me
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "first_name": "Maksym",
+  "last_name": "Lukianov"
+}
