@@ -12,7 +12,9 @@ repos:
       - id: check-yaml
       - id: check-merge-conflict
       - id: check-json
+        exclude: "tsconfig\\.json$"
       - id: debug-statements
+        files: ^api/
       - id: trailing-whitespace
 
   - repo: https://github.com/asottile/pyupgrade
@@ -20,6 +22,7 @@ repos:
     hooks:
       - id: pyupgrade
         args: ["--py311-plus"]
+        files: ^api/
 
   - repo: https://github.com/akaihola/darker
     rev: v2.1.0
@@ -29,11 +32,14 @@ repos:
         additional_dependencies:
           - black==24.8.0
           - isort==5.13.2
+        files: ^api/
 
   - repo: https://github.com/PyCQA/flake8
     rev: 7.0.0
     hooks:
       - id: flake8
+        args: ["--config", "api/setup.cfg"]
+        files: ^api/
 
   - repo: https://github.com/compilerla/conventional-pre-commit
     rev: v3.4.0
@@ -46,3 +52,4 @@ repos:
     rev: 1.7.10
     hooks:
       - id: bandit
+        files: ^api/
