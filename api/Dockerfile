@@ -27,7 +27,10 @@ COPY ./app /app/app
 COPY ./migrations /app/migrations
 COPY ./alembic.ini /app/alembic.ini
 COPY ./server.py /app/server.py
+COPY ./entrypoint.sh /app/entrypoint.sh
+
+RUN chmod +x /app/entrypoint.sh
 
 EXPOSE 8080
 
-CMD ["python3", "server.py"]
+ENTRYPOINT ["/app/entrypoint.sh"]
