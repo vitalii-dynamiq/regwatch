@@ -3707,5 +3707,3 @@ and avoiding inclusion of unnecessary files during formatting or compilation.
 - types
   - standardize quotes for import statements
   ([b1b61ae](https://git.otakoyi.com/reg-watch/reg-watch-web/commit/b1b61ae3a635aad164508f8556fc3823601df885)) — [Maksym Lukianov](mailto:ml@otakoyi.com) • 2025-08-13. Replaced double quotes with single quotes in import statements across multiple files. This change maintains consistency in the codebase's style and adheres to the established linting rules
-
-
