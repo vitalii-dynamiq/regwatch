@@ -17,6 +17,7 @@ scheduler = TaskiqScheduler(
     sources=[
         LabelScheduleSource(broker),
         AsyncpgScheduleSource(
+            broker=broker,
             dsn=settings.db_taskiq_url,
             table_name="schedules",  # Store schedules in taskiq schema
         ),
